@@ -32,10 +32,11 @@ public class WhatsappService {
         return whatsappRepository.changeAdmin(approver , user , group);
     }
 
-//    public int removeUser(User user) {
-//        return whatsappRepository.removeUser(user);
-//    }
-//
-//    public String findMessage(Date start, Date end, int k) {
-//    }
+    public int removeUser(User user) {
+        return 0;
+    }
+
+    public String findMessage(Date start, Date end, int k) {
+        return "";
+    }
 }

@@ -99,7 +99,4 @@ public class WhatsappRepository {
         }
     }
 
-//    public int removeUser(User user) {
-//
-//    }
 }
