@@ -26,4 +26,24 @@ public class WhatsappRepository {
         this.customGroupCount = 0;
         this.messageId = 0;
     }
+
+    public String createUser(String name, String mobile) throws Exception {
+        if (userMobile.contains(mobile)){
+            throw new Exception("User Already Exists !!");
+        }
+
+        userMobile.add(mobile);
+        return "SUCCESS";
+    }
+
+    public Group createGroup(List<User> users) {
+        if(users.size() > 2){
+            Group group = new Group("Group" + groupUserMap.size(), users.size());
+            groupUserMap.put(group , users);
+            return group;
+        }
+        Group group = new Group(users.get(1).getName() , users.size());
+        groupUserMap.put(group , users);
+        return group;
+    }
 }
