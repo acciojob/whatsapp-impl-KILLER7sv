@@ -34,9 +34,13 @@ public class Message {
     public Message() {
     }
 
-    public Message(int id, String content, Date timestamp) {
+//    public Message(int id, String content, Date timestamp) {
+//        this.id = id;
+//        this.content = content;
+//        this.timestamp = timestamp;
+//    }
+    public Message(int id, String content) {
         this.id = id;
         this.content = content;
-        this.timestamp = timestamp;
     }
 }
