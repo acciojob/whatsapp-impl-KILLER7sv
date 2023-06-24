@@ -37,13 +37,69 @@ public class WhatsappRepository {
     }
 
     public Group createGroup(List<User> users) {
-        if(users.size() > 2){
-            Group group = new Group("Group" + groupUserMap.size(), users.size());
+        if(users.size() == 2){
+            Group group = new Group(users.get(1).getName() , users.size());
             groupUserMap.put(group , users);
+            adminMap.put(group, users.get(0));
             return group;
         }
-        Group group = new Group(users.get(1).getName() , users.size());
+
+        Group group = new Group("Group" + groupUserMap.size(), users.size());
         groupUserMap.put(group , users);
+        adminMap.put(group, users.get(0));
+        customGroupCount++;
         return group;
     }
+
+
+    public int createMessage(String content) {
+        messageId++;
+        return messageId;
+    }
+
+    public int sendMessage(Message message, User sender, Group group) throws Exception {
+        if(!groupUserMap.containsKey(group)){
+            throw new Exception("Group does not exist");
+        }
+        List<User> a = groupUserMap.get(group);
+        boolean flag = false;
+        for(User user : a){
+            if(user == sender){
+                flag = true;
+            }
+        }
+        if(flag){
+            return messageId;
+        }else{
+            throw new Exception("You are not allowed to send message");
+        }
+    }
+
+    public String changeAdmin(User approver, User user, Group group) throws Exception {
+        if(!groupUserMap.containsKey(group)){
+            throw new Exception("Group does not exist");
+        }
+
+        if(adminMap.get(user) != approver){
+            throw new Exception("Approver does not have rights");
+        }
+
+        List<User> a = groupUserMap.get(group);
+        boolean flag = false;
+        for(User x : a){
+            if(user == x){
+                flag = true;
+            }
+        }
+        if(flag){
+            adminMap.put(group , user);
+            return "SUCCESS";
+        }else{
+            throw new Exception("User is not a participant");
+        }
+    }
+
+//    public int removeUser(User user) {
+//
+//    }
 }

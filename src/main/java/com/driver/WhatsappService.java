@@ -20,17 +20,20 @@ public class WhatsappService {
         return whatsappRepository.createGroup(users);
     }
 
-//    public int createMessage(String content) {
-//
-//    }
-//
-//    public int sendMessage(Message message, User sender, Group group) {
-//    }
-//
-//    public String changeAdmin(User approver, User user, Group group) {
-//    }
-//
+    public int createMessage(String content) {
+        return whatsappRepository.createMessage(content);
+    }
+
+    public int sendMessage(Message message, User sender, Group group) throws Exception {
+        return whatsappRepository.sendMessage(message , sender , group);
+    }
+
+    public String changeAdmin(User approver, User user, Group group) throws Exception {
+        return whatsappRepository.changeAdmin(approver , user , group);
+    }
+
 //    public int removeUser(User user) {
+//        return whatsappRepository.removeUser(user);
 //    }
 //
 //    public String findMessage(Date start, Date end, int k) {
