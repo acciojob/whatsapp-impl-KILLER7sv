@@ -29,10 +29,11 @@ public class WhatsappRepository {
 
     public String createUser(String name, String mobile) throws Exception {
         if (userMobile.contains(mobile)){
-            throw new Exception("User Already Exists !!");
+            throw new Exception("User already exists");
         }
 
         userMobile.add(mobile);
+        User user = new User(name , mobile);
         return "SUCCESS";
     }
 
@@ -41,66 +42,66 @@ public class WhatsappRepository {
             Group group = new Group(users.get(1).getName() , users.size());
             groupUserMap.put(group , users);
             adminMap.put(group, users.get(0));
+            groupMessageMap.put(group , new ArrayList<Message>());
             return group;
         }
-
-        Group group = new Group("Group" + groupUserMap.size(), users.size());
+        this.customGroupCount+=1;
+        Group group = new Group(new String("Group" + this.customGroupCount), users.size());
         groupUserMap.put(group , users);
         adminMap.put(group, users.get(0));
-        customGroupCount++;
+        groupMessageMap.put(group , new ArrayList<Message>());
         return group;
     }
 
 
     public int createMessage(String content) {
-        messageId++;
+        this.messageId += 1;
+        Message message = new Message(messageId , content);
         return messageId;
     }
 
     public int sendMessage(Message message, User sender, Group group) throws Exception {
-        if(!groupUserMap.containsKey(group)){
-            throw new Exception("Group does not exist");
-        }
-        List<User> a = groupUserMap.get(group);
-        boolean flag = false;
-        for(User user : a){
-            if(user == sender){
-                flag = true;
+        if(adminMap.containsKey(group)){
+            List<User> a = groupUserMap.get(group);
+            boolean flag = false;
+            for(User user : a){
+                if(user.equals(sender)){
+                    flag = true;
+                    break;
+                }
             }
-        }
-        if(flag){
-            return messageId;
-        }else{
+            if(flag){
+                senderMap.put(message , sender);
+                List<Message> messages = groupMessageMap.get(group);
+                messages.add(message);
+                groupMessageMap.put(group , messages);
+                return messages.size();
+            }
             throw new Exception("You are not allowed to send message");
         }
+        throw new Exception("Group does not exist");
     }
 
     public String changeAdmin(User approver, User user, Group group) throws Exception {
-        if(!groupUserMap.containsKey(group)){
-            return "Group does not exist";
-        }
         if(adminMap.containsKey(group)){
-            if(adminMap.get(group) != approver){
-                return "Approver does not have rights";
+            if(adminMap.get(group).equals(approver)){
+                List<User> a = groupUserMap.get(group);
+                boolean flag = false;
+                for(User x : a){
+                    if(user == x){
+                        flag = true;
+                        break;
+                    }
+                }
+                if(flag){
+                    adminMap.put(group , user);
+                    return "SUCCESS";
+                }
+                throw new Exception("User is not a participant");
             }
-        }else{
-            return "User doest Not Exist";
+            throw new Exception("Approver does not have rights");
         }
-
-
-        List<User> a = groupUserMap.get(group);
-        boolean flag = false;
-        for(User x : a){
-            if(user == x){
-                flag = true;
-            }
-        }
-        if(flag){
-            adminMap.put(group , user);
-            return "SUCCESS";
-        }else{
-            return "User is not a participant";
-        }
+        throw new Exception("Group does not exist");
     }
 
 }

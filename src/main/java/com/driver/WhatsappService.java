@@ -12,7 +12,6 @@ public class WhatsappService {
     @Autowired
     WhatsappRepository whatsappRepository;
     public String createUser(String name, String mobile) throws Exception {
-        User user = new User(name , mobile);
         return whatsappRepository.createUser(name , mobile);
     }
 
